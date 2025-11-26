@@ -4,14 +4,14 @@ on:
 
 jobs:
   pulldocker:
-    host: 127.0.0.1
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v1.2.3
         with:
-          host: ${{ secrets.PROD_IP }}
+          host: 127.0.0.1 
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           port: 22
