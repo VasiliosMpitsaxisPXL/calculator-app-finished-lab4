@@ -1,0 +1,27 @@
+name: prod-deploy
+on:
+  workflow_dispatch: 
+
+jobs:
+  pulldocker:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.0
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v1.2.3
+        with:
+          host: ${{ secrets.PROD_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            echo "Pulling latest Docker image..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/cd-lab4:latest
+            echo "Stopping running containers..."
+            docker stop $(docker ps -q) || true
+            docker rm $(docker ps -aq) || true
+            echo "Starting new container on port 80..."
+            docker run -d -p 80:80 --name cd-lab4 ${{ secrets.DOCKER_USERNAME }}/cd-lab4:latest
+            
+    
