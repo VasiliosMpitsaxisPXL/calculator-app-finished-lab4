@@ -24,4 +24,5 @@ jobs:
             echo "Starting new container on port 80..."
             docker run -d -p 80:80 --name cd-lab4 ${{ secrets.DOCKER_USERNAME }}/cd-lab4:latest
             
+            
     
